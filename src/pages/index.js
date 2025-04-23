@@ -22,7 +22,7 @@ const Home = () => {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      // router.push("/login");
+      router.push("/login");
     }, 1500);
   }, [router]);
   return (
