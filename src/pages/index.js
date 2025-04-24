@@ -23,7 +23,7 @@ const Home = () => {
   useEffect(() => {
     setTimeout(() => {
       router.push("/login");
-    }, 1500);
+    }, 2000);
   }, [router]);
   return (
     <div className="h-svh md:min-h-screen  max-w-4xl mx-auto flex flex-col gap-4 justify-center py-16 ">
