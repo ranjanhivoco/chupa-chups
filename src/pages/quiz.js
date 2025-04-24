@@ -8,7 +8,6 @@ const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState(""); 
   const [startClicked, setStartClicked] = useState(false);
   const [submitClicked, setSubmitClicked] = useState(false);
-  const [animationStep, setAnimationStep] = useState(0);
   const [data, setData] = useState();
 
   const cardsArray = [
@@ -25,34 +24,6 @@ const Quiz = () => {
       src: "/images/C.png",
     },
   ];
-
-  const animations = [
-    { y: -200 },  // Step 0: Ball starts at bottom
-    { y: -50 },    // Step 1: Ball goes to default position
-    { y: -200 },  // Step 2: Ball goes down again
-    { y: "default" }     // Step 3: Ball goes to default position and stays
-  ];
-  
-  // Transitions for each step
-  const transitions = [
-    { duration: 0.8, ease: "easeInOut" },  // Coming up initially
-    { duration: 0.8, ease: "easeInOut" },     // Going down
-    { duration: 0.8, ease: "easeInOut" },   // Coming up final time
-    { duration: 0.8, ease: "easeInOut" },   // Coming up final time
-  ];
-  
-  // Auto-advance through animation steps
-  useEffect(() => {
-    // If we're not at the last step yet
-    if (animationStep < animations.length - 1) {
-      const timer = setTimeout(() => {
-        setAnimationStep(animationStep + 1);
-      }, transitions[animationStep]?.duration * 1000 || 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [animationStep]);
-  
 
 
   const handleSubmit=()=>{
@@ -81,7 +52,6 @@ const Quiz = () => {
       console.error("Error:", err);
     }
   }
-
 
     useEffect(() => {
       const mail = sessionStorage.getItem("user_email");
@@ -117,44 +87,50 @@ const Quiz = () => {
       />
 
       {!startClicked && (
-        // <motion.div
-        //   initial={{ y: "0" }}
-        //   animate={{
-        //     y:[300, 0,250, 0]
-        //   }}
-        //   transition={{
-        //     duration: 2,
-        //     ease: "easeInOut",
-        //     times: [0, 0.6, 1],
-        //   }}
-        // >
-
         <motion.div
-          className=""
-          initial={{ y: 0 }} // Start at bottom
-          animate={animations[animationStep]}
-          transition={transitions[animationStep > 0 ? animationStep - 1 : 0]}
+          style={{
+            boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
+          }}
+          onClick={() => setStartClicked(true)}
+          className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
+        -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
+        
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 1.5,
+            delay: 0.5,
+            scale: {
+              type: "spring",
+              damping: 5,
+              stiffness: 100,
+              restDelta: 0.001,
+              times: [0, 0.2, 0.4, 0.6, 0.8],
+              keyframes: [0.2, 1],
+            },
+            opacity: { duration: 0.8 },
+          }}
         >
-          <div
+          {/* <div
             style={{
               boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
             }}
             onClick={() => setStartClicked(true)}
             className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
             -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
-          >
-            <Image
-              style={{
-                textShadow: " 6px 6px 4px 0px #FFF20066",
-              }}
-              className=""
-              src="/images/start-fontbolt.png"
-              width={116}
-              height={34}
-              alt=" start-fontbolt logo"
-              priority={true}
-            />
-          </div>
+          > */}
+          <Image
+            style={{
+              textShadow: " 6px 6px 4px 0px #FFF20066",
+            }}
+            className=""
+            src="/images/start-fontbolt.png"
+            width={116}
+            height={34}
+            alt=" start-fontbolt logo"
+            priority={true}
+          />
+          {/* </div> */}
         </motion.div>
       )}
 
