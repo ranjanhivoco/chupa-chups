@@ -5,14 +5,13 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 
-
 const Login = () => {
-  const router=useRouter()
+  const router = useRouter();
   const [userDetails, setUserDetails] = useState({
     name: "",
     user_email: "",
     phone_number: "",
-    is_accepted:false
+    is_accepted: false,
   });
 
   console.log(userDetails, "userDetails");
@@ -25,8 +24,13 @@ const Login = () => {
     return /^\d{10}$/.test(phone);
   }
 
-  function isValidData({ name, user_email, phone_number,is_accepted }) {
-    return name.trim() && isValidEmail(user_email) && isValidPhone(phone_number) && is_accepted===true
+  function isValidData({ name, user_email, phone_number, is_accepted }) {
+    return (
+      name.trim() &&
+      isValidEmail(user_email) &&
+      isValidPhone(phone_number) &&
+      is_accepted === true
+    );
   }
 
   async function sendData(data) {
@@ -56,14 +60,14 @@ const Login = () => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!userDetails.user_email) return;
-    sessionStorage.setItem("user_email",userDetails.user_email)
-  },[userDetails.user_email])
+    sessionStorage.setItem("user_email", userDetails.user_email);
+  }, [userDetails.user_email]);
 
   return (
     // flex-col items-center
-    <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-full justify-center   md:items-stretch items-center  gap-12.5 py-11 mx-auto">
+    <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-4/5 md:w-full md:justify-center   md:items-stretch items-center  gap-12.5 py-11 mx-auto">
       {/* <div className="grid flex-col gap-7 items-center   "> */}
 
       <motion.div
@@ -85,11 +89,11 @@ const Login = () => {
       </motion.div>
 
       <motion.div
-        initial={{ y: "100vh", opacity: 0 }}
+        initial={{ y: "30vh", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 30, duration: 3, delay: 0.5 }}
+        transition={{ type: "spring", stiffness: 20, duration: 3, delay: 1}}
       >
-        <div className="w-full relative z-10 flex flex-col gap-3 font-normal text-sm leading-[100%] tracking-normal">
+        <div className="w-full  relative z-10 flex flex-col gap-3 font-normal text-sm leading-[100%] tracking-normal">
           <div className="w-full ">
             <input
               type="text"
@@ -106,7 +110,13 @@ const Login = () => {
               minLength={3}
               maxLength={20}
               placeholder="Name"
-              className="w-full min-h-12 p-4 py-3.5 text-center text-white focus:text-chupa-500 bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white focus:bg-white focus:font-semibold focus:ring-2 focus:border-none  focus:ring-chupa-500 outline-none "
+              className={`w-full min-h-12 p-4 py-3.5 text-center  bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white  outline-none 
+                ${
+                  userDetails.name
+                    ? "text-chupa-500 bg-white font-semibold ring-2 border-none ring-chupa-500"
+                    : "text-white"
+                }
+                `}
             />
           </div>
 
@@ -121,8 +131,10 @@ const Login = () => {
                   user_email: e.target.value,
                 })
               }
-              value={userDetails.email}
-              className="w-full min-h-12 p-4 py-3.5 text-center text-white focus:text-chupa-500 bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white focus:bg-white focus:font-semibold focus:ring-2 focus:border-none  focus:ring-chupa-500 outline-none "
+              value={userDetails.user_email}
+              className={`w-full min-h-12 p-4 py-3.5 text-center  bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white  outline-none 
+                ${ userDetails.user_email? "text-chupa-500 bg-white font-semibold ring-2 border-none ring-chupa-500": "text-white"}
+              `}
             />
           </div>
 
@@ -141,8 +153,14 @@ const Login = () => {
               name="number"
               minLength={10}
               maxLength={10}
-              value={userDetails.phone}
-              className="w-full min-h-12 p-4 py-3.5 text-center text-white focus:text-chupa-500 bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white focus:bg-white focus:font-semibold focus:ring-2 focus:border-none  focus:ring-chupa-500 outline-none "
+              value={userDetails.phone_number}
+              className={`w-full min-h-12 p-4 py-3.5 text-center  bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white  outline-none 
+                ${
+                  userDetails.phone_number
+                    ? "text-chupa-500 bg-white font-semibold ring-2 border-none ring-chupa-500"
+                    : "text-white"
+                }
+                `}
             />
           </div>
         </div>
@@ -153,9 +171,10 @@ const Login = () => {
       <motion.div
         initial={{ y: "100vh" }}
         animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 20, duration: 6, delay: 1 }}
+        
+        transition={{ type: "spring", stiffness: 20, duration: 1, delay: 1.5  }}
       >
-        <div className="grid gap-7 w-full min-w-62 ">
+        <div className="grid gap-7 w-full min-w-68 ">
           <div
             onClick={() =>
               setUserDetails({

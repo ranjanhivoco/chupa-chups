@@ -101,6 +101,7 @@ const audioRef = useRef(null);
               width={100}
               height={500}
               alt="Right confetti"
+              unoptimized
             />
 
             <Image

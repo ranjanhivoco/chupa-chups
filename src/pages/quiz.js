@@ -8,6 +8,7 @@ const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState(""); 
   const [startClicked, setStartClicked] = useState(false);
   const [submitClicked, setSubmitClicked] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
   const [data, setData] = useState();
 
   const cardsArray = [
@@ -24,6 +25,35 @@ const Quiz = () => {
       src: "/images/C.png",
     },
   ];
+
+  const animations = [
+    { y: -200 },  // Step 0: Ball starts at bottom
+    { y: -50 },    // Step 1: Ball goes to default position
+    { y: -200 },  // Step 2: Ball goes down again
+    { y: "default" }     // Step 3: Ball goes to default position and stays
+  ];
+  
+  // Transitions for each step
+  const transitions = [
+    { duration: 0.8, ease: "easeInOut" },  // Coming up initially
+    { duration: 0.8, ease: "easeInOut" },     // Going down
+    { duration: 0.8, ease: "easeInOut" },   // Coming up final time
+    { duration: 0.8, ease: "easeInOut" },   // Coming up final time
+  ];
+  
+  // Auto-advance through animation steps
+  useEffect(() => {
+    // If we're not at the last step yet
+    if (animationStep < animations.length - 1) {
+      const timer = setTimeout(() => {
+        setAnimationStep(animationStep + 1);
+      }, transitions[animationStep]?.duration * 1000 || 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [animationStep]);
+  
+
 
   const handleSubmit=()=>{
     setSubmitClicked(true);      // remove when api og is added  
@@ -70,7 +100,8 @@ const Quiz = () => {
     // <div className="pt-11  h-screen  flex  items-center justifybetween  flex-col gap-18 relative">
     <div
       className=" py-11 h-svh overflow-hidden  md:h-screen max-w-4xl  mx-auto
-    flex flex-col items-center justify-between relative
+    flex flex-col 
+    items-center justify-between relative
     "
     >
       <Image
@@ -86,10 +117,23 @@ const Quiz = () => {
       />
 
       {!startClicked && (
+        // <motion.div
+        //   initial={{ y: "0" }}
+        //   animate={{
+        //     y:[300, 0,250, 0]
+        //   }}
+        //   transition={{
+        //     duration: 2,
+        //     ease: "easeInOut",
+        //     times: [0, 0.6, 1],
+        //   }}
+        // >
+
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          className=""
+          initial={{ y: 0 }} // Start at bottom
+          animate={animations[animationStep]}
+          transition={transitions[animationStep > 0 ? animationStep - 1 : 0]}
         >
           <div
             style={{
@@ -97,7 +141,7 @@ const Quiz = () => {
             }}
             onClick={() => setStartClicked(true)}
             className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
-        -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
+            -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
           >
             <Image
               style={{
@@ -120,7 +164,7 @@ const Quiz = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="flex flex-col gap-3.5  w-9/10 md:w-auto"
+            className="flex flex-col gap-3.5  w-4/5 md:w-auto"
           >
             {/* <div
               className="flex flex-col
@@ -135,15 +179,20 @@ const Quiz = () => {
               Which style of Chupa Chups fun drop did you spot on the stream?{" "}
             </h2>
 
-            <div className=" flex flex-wrap w-full md:mx-auto gap-3 gap-y-1  md:gap-4.5  justify-center md:justify-between items-center ">
+            <div className="grid grid-cols-2 [2] md:grid-cols-3 fle flexwrap w-full  md:mx-auto gap-3 gap-y-2  md:gap-4.5  justify-between md:justify-between items-center ">
               {cardsArray.map((card) => (
                 <section
                   key={card.id}
                   onClick={() => setOptionSelected(card.id)}
-                  className={`bg-chupa-500 px-3.25 py-2.5 flex rounded-2xl transition-all duration-200 hover:outline-2 hover:outline-yellow-chupa shadow-[0px_1.97px_3.93px_0px_#00000040] hover:shadow-[0px_1.97px_3.93px_0px_#FFF20080] relative
+                  className={`bg-chupa-500 px-3.25 py-2.5 flex  justify-center items-center  rounded-2xl transition-all duration-200 hover:outline-2 hover:outline-yellow-chupa shadow-[0px_1.97px_3.93px_0px_#00000040] hover:shadow-[0px_1.97px_3.93px_0px_#FFF20080] relative
                 ${
                   optionSelected === card.id
                     ? "outline-2 outline-yellow-chupa"
+                    : ""
+                }
+                ${
+                  card.id === "C"
+                    ? "col-span-2 md:col-span-1   mx-auto md:mx-0  w-1/2  md:w-auto"
                     : ""
                 }
                 `}
@@ -154,8 +203,8 @@ const Quiz = () => {
                   <Image
                     className=" md:w-30 md:h-44 2xl:w-44 2xl:h-60"
                     src={card.src}
-                    width={100}
-                    height={175}
+                    width={95}
+                    height={140}
                     alt="Picture of fun drop"
                     priority={true}
                   />
